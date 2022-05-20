@@ -27,7 +27,7 @@ export const ConfigChartOptions = ({
 
   const dimensions = useMemo(() => {
     return schemas.map((schema, index) => {
-      let params;
+      let params = {};
       const DimensionComponent = schema.component || PanelItem;
       if (schema.eleType === 'colorpicker') {
         params = {

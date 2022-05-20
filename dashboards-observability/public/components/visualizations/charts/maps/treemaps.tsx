@@ -55,7 +55,7 @@ export const TreeMap = ({ visualizations, layout, config }: any) => {
     isEmpty(data[childField.name]) ||
     isEmpty(data[valueField.name]) ||
     (!isNull(parentField) && isEmpty(data[parentField.name])) ||
-    isEqual(childField, parentField) ||
+    isEqual(childField.name, parentField?.name) ||
     indexOf(NUMERICAL_FIELDS, valueField.type) < 0
   )
     return <EmptyPlaceholder icon={visualizations?.vis?.iconType} />;
