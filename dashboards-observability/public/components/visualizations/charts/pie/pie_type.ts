@@ -9,7 +9,12 @@ import { LensIconChartPie } from '../../assets/chart_pie';
 import { PLOTLY_COLOR } from '../../../../../common/constants/shared';
 import { VizDataPanel } from '../../../event_analytics/explorer/visualizations/config_panel/config_panes/default_vis_editor';
 import { ConfigEditor } from '../../../event_analytics/explorer/visualizations/config_panel/config_panes/json_editor';
-import { ConfigValueOptions } from '../../../event_analytics/explorer/visualizations/config_panel/config_panes/config_controls';
+import {
+  ColorPalettePicker,
+  ConfigChartOptions,
+  ConfigValueOptions,
+} from '../../../event_analytics/explorer/visualizations/config_panel/config_panes/config_controls';
+import { DEFAULT_PALETTE, PIE_PALETTES } from '../../../../../common/constants/colors';
 
 const sharedConfigs = getPlotlySharedConfigs();
 const VIS_CATEGORY = getPlotlyCategory();
@@ -59,10 +64,10 @@ export const createPieTypeDefinition = (params: any) => ({
             ],
           },
           {
-            id: 'chart_options',
-            name: 'Chart options',
-            editor: ConfigValueOptions,
-            mapTo: 'chartOptions',
+            id: 'chart_styles',
+            name: 'Chart Styles',
+            editor: ConfigChartOptions,
+            mapTo: 'chartStyles',
             schemas: [
               {
                 name: 'Mode',
@@ -76,6 +81,15 @@ export const createPieTypeDefinition = (params: any) => ({
                   ],
                   defaultSelections: [{ name: 'Pie', modeId: 'pie' }],
                 },
+              },
+              {
+                name: 'Color Theme',
+                isSingleSelection: true,
+                component: ColorPalettePicker,
+                mapTo: 'colorTheme',
+                eleType: 'colorpicker',
+                options: PIE_PALETTES,
+                defaultState: { name: DEFAULT_PALETTE },
               },
             ],
           },

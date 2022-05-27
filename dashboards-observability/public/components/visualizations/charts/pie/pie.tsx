@@ -6,6 +6,7 @@
 import React from 'react';
 import { take, isEmpty } from 'lodash';
 import { Plt } from '../../plotly/plot';
+import { DEFAULT_PALETTE } from '../../../../../common/constants/colors';
 
 export const Pie = ({ visualizations, layout, config }: any) => {
   const { vis } = visualizations;
@@ -19,8 +20,11 @@ export const Pie = ({ visualizations, layout, config }: any) => {
     dataConfig?.valueOptions && dataConfig.valueOptions.xaxis ? dataConfig.valueOptions.xaxis : [];
   const yaxis =
     dataConfig?.valueOptions && dataConfig.valueOptions.yaxis ? dataConfig.valueOptions.yaxis : [];
-  const type = dataConfig?.chartOptions?.mode ? dataConfig?.chartOptions?.mode[0]?.modeId : 'pie';
+  const type = dataConfig?.chartStyles?.mode ? dataConfig?.chartStyles?.mode[0]?.modeId : 'pie';
   const lastIndex = fields.length - 1;
+  const colorTheme = dataConfig?.chartStyles?.colorTheme
+    ? dataConfig?.chartStyles?.colorTheme
+    : { name: DEFAULT_PALETTE };
 
   let valueSeries;
   if (!isEmpty(xaxis) && !isEmpty(yaxis)) {
@@ -30,6 +34,18 @@ export const Pie = ({ visualizations, layout, config }: any) => {
   }
 
   const pies = valueSeries.map((field: any, index) => {
+    const marker =
+      colorTheme.name !== DEFAULT_PALETTE
+        ? {
+            marker: {
+              colors: [...Array(data[field.name].length).fill(colorTheme.color)],
+              line: {
+                color: '#000000',
+                width: 1,
+              },
+            },
+          }
+        : undefined;
     return {
       labels: data[xaxis ? xaxis[0]?.label : fields[lastIndex].name],
       values: data[field.name],
@@ -44,6 +60,7 @@ export const Pie = ({ visualizations, layout, config }: any) => {
         row: Math.floor(index / 3),
         column: index % 3,
       },
+      ...marker,
     };
   });
 
